@@ -49,44 +49,53 @@ class _CircuitDiagramWidgetState extends State<CircuitDiagramWidget>
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    Widget canvasWidget = AnimatedBuilder(
-      animation: _controller,
-      builder: (context, _) {
-        return CustomPaint(
-          size: const Size(double.infinity, 360),
-          painter: _Circuit3DWorkbenchPainter(
-            result: widget.result,
-            showCurrentFlow: widget.showCurrentFlow,
-            animationProgress: _controller.value,
-            tiltX: _tiltX,
-            tiltY: _tiltY,
-            zoomScale: widget.zoomScale,
-            focusOffsetX: widget.focusOffsetX,
-            isDark: isDark,
-          ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Auto-scale zoom down on mobile screens (e.g. 320px - 500px width)
+        final double width = constraints.maxWidth.isFinite ? constraints.maxWidth : 600.0;
+        final double autoScale = (width / 540.0).clamp(0.55, 1.15);
+        final double effectiveZoom = widget.zoomScale * autoScale;
+
+        Widget canvasWidget = AnimatedBuilder(
+          animation: _controller,
+          builder: (context, _) {
+            return CustomPaint(
+              size: Size(double.infinity, (360 * autoScale).clamp(200.0, 420.0)),
+              painter: _Circuit3DWorkbenchPainter(
+                result: widget.result,
+                showCurrentFlow: widget.showCurrentFlow,
+                animationProgress: _controller.value,
+                tiltX: _tiltX,
+                tiltY: _tiltY,
+                zoomScale: effectiveZoom,
+                focusOffsetX: widget.focusOffsetX,
+                isDark: isDark,
+              ),
+            );
+          },
+        );
+
+        if (!widget.isInteractive) {
+          return canvasWidget;
+        }
+
+        return MouseRegion(
+          onHover: (event) {
+            final size = context.size ?? const Size(500, 360);
+            setState(() {
+              _tiltX = ((event.localPosition.dx / size.width) - 0.5) * 0.45;
+              _tiltY = ((event.localPosition.dy / size.height) - 0.5) * 0.35;
+            });
+          },
+          onExit: (_) {
+            setState(() {
+              _tiltX = 0.0;
+              _tiltY = 0.0;
+            });
+          },
+          child: canvasWidget,
         );
       },
-    );
-
-    if (!widget.isInteractive) {
-      return canvasWidget;
-    }
-
-    return MouseRegion(
-      onHover: (event) {
-        final size = context.size ?? const Size(500, 360);
-        setState(() {
-          _tiltX = ((event.localPosition.dx / size.width) - 0.5) * 0.45;
-          _tiltY = ((event.localPosition.dy / size.height) - 0.5) * 0.35;
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _tiltX = 0.0;
-          _tiltY = 0.0;
-        });
-      },
-      child: canvasWidget,
     );
   }
 }
