@@ -181,23 +181,42 @@ class HeroSection extends StatelessWidget {
                   ),
                   const SizedBox(height: AppConstants.spaceXl),
 
-                  // Hero Action Row
-                  Wrap(
-                    spacing: AppConstants.spaceMd,
-                    runSpacing: AppConstants.spaceMd,
-                    children: [
-                      AppButton.primary(
-                        label: 'Enter Live Simulator',
-                        icon: Icons.bolt_rounded,
-                        onPressed: onStartSimulating,
-                      ),
-                      AppButton.secondary(
-                        label: 'Explore Physics Story',
-                        icon: Icons.arrow_downward_rounded,
-                        onPressed: onExplore,
-                      ),
-                    ],
-                  ),
+                  // Hero Action Row (Responsive Stacking)
+                  if (isDesktop)
+                    Row(
+                      children: [
+                        AppButton.primary(
+                          label: 'Enter Live Simulator',
+                          icon: Icons.bolt_rounded,
+                          onPressed: onStartSimulating,
+                        ),
+                        const SizedBox(width: AppConstants.spaceMd),
+                        AppButton.secondary(
+                          label: 'Explore Physics Story',
+                          icon: Icons.arrow_downward_rounded,
+                          onPressed: onExplore,
+                        ),
+                      ],
+                    )
+                  else
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        AppButton.primary(
+                          label: 'Enter Live Simulator',
+                          icon: Icons.bolt_rounded,
+                          isFullWidth: true,
+                          onPressed: onStartSimulating,
+                        ),
+                        const SizedBox(height: AppConstants.spaceSm),
+                        AppButton.secondary(
+                          label: 'Explore Physics Story',
+                          icon: Icons.arrow_downward_rounded,
+                          isFullWidth: true,
+                          onPressed: onExplore,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             );
