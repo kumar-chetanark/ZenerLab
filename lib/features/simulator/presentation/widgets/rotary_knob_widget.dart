@@ -133,58 +133,65 @@ class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
         ),
         const SizedBox(height: 8),
         // Typable interactive readout badge
-        Container(
-          height: 30,
-          constraints: const BoxConstraints(minWidth: 72, maxWidth: 104),
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: isDark ? AppColors.darkBg : const Color(0xFFF1F5F9),
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(
-              color: _focusNode.hasFocus ? widget.accentColor : (isDark ? AppColors.darkBorder : const Color(0xFFCBD5E1)),
-              width: 1.2,
+        InkWell(
+          onTap: () {
+            _focusNode.requestFocus();
+          },
+          borderRadius: BorderRadius.circular(4),
+          child: Container(
+            height: 32,
+            constraints: const BoxConstraints(minWidth: 76, maxWidth: 110),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.darkBg : const Color(0xFFF1F5F9),
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                color: _focusNode.hasFocus ? widget.accentColor : (isDark ? AppColors.darkBorder : const Color(0xFFCBD5E1)),
+                width: 1.5,
+              ),
             ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: _textController,
-                  focusNode: _focusNode,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  textAlign: TextAlign.right,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: TextField(
+                    controller: _textController,
+                    focusNode: _focusNode,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    textAlign: TextAlign.right,
+                    style: AppTypography.monoSub.copyWith(
+                      color: widget.accentColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                    ),
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.zero,
+                      border: InputBorder.none,
+                      hintText: '0.0',
+                    ),
+                    onChanged: (val) {
+                      final parsed = double.tryParse(val.trim());
+                      if (parsed != null && parsed >= widget.min && parsed <= widget.max) {
+                        widget.onChanged(parsed);
+                      }
+                    },
+                    onSubmitted: _commitTextChange,
+                  ),
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  widget.unit,
                   style: AppTypography.monoSub.copyWith(
-                    color: widget.accentColor,
+                    color: isDark ? AppColors.darkTextSecondary : const Color(0xFF64748B),
+                    fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    fontSize: 13,
                   ),
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.zero,
-                    border: InputBorder.none,
-                  ),
-                  onChanged: (val) {
-                    final parsed = double.tryParse(val.trim());
-                    if (parsed != null && parsed >= widget.min && parsed <= widget.max) {
-                      widget.onChanged(parsed);
-                    }
-                  },
-                  onSubmitted: _commitTextChange,
                 ),
-              ),
-              const SizedBox(width: 4),
-              Text(
-                widget.unit,
-                style: AppTypography.monoSub.copyWith(
-                  color: isDark ? AppColors.darkTextSecondary : const Color(0xFF64748B),
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],
