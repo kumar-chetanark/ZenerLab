@@ -31,6 +31,57 @@ class RotaryKnobWidget extends StatefulWidget {
 class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
   double _dragStartY = 0.0;
   double _startValue = 0.0;
+  late TextEditingController _textController;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(text: _formatValue(widget.value));
+    _focusNode.addListener(() {
+      if (!_focusNode.hasFocus) {
+        _commitTextChange(_textController.text);
+      }
+    });
+  }
+
+  @override
+  void didUpdateWidget(RotaryKnobWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.value != widget.value && !_focusNode.hasFocus) {
+      _textController.text = _formatValue(widget.value);
+    }
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  String _formatValue(double val) {
+    if (val >= 1000 && widget.unit == 'Ω') {
+      return (val / 1000).toStringAsFixed(2);
+    }
+    return val.toStringAsFixed(1);
+  }
+
+  void _commitTextChange(String text) {
+    final parsed = double.tryParse(text.trim());
+    if (parsed != null) {
+      double targetVal = parsed;
+      if (widget.unit == 'Ω' && widget.value >= 1000 && parsed < 50) {
+        // If user typed kΩ value
+        targetVal = parsed * 1000;
+      }
+      final clamped = targetVal.clamp(widget.min, widget.max);
+      widget.onChanged(clamped);
+      _textController.text = _formatValue(clamped);
+    } else {
+      _textController.text = _formatValue(widget.value);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +100,7 @@ class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
           style: theme.textTheme.labelSmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
             letterSpacing: 0.8,
+            fontSize: 10,
           ),
         ),
         const SizedBox(height: 8),
@@ -80,11 +132,53 @@ class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          widget.value >= 1000 ? '${(widget.value / 1000).toStringAsFixed(1)} k${widget.unit}' : '${widget.value.toStringAsFixed(1)} ${widget.unit}',
-          style: AppTypography.monoSub.copyWith(
-            color: widget.accentColor,
-            fontWeight: FontWeight.bold,
+        // Typable interactive readout badge
+        Container(
+          height: 28,
+          constraints: const BoxConstraints(minWidth: 68, maxWidth: 96),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkBg : const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(
+              color: _focusNode.hasFocus ? widget.accentColor : (isDark ? AppColors.darkBorder : const Color(0xFFCBD5E1)),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Flexible(
+                child: TextField(
+                  controller: _textController,
+                  focusNode: _focusNode,
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  textAlign: TextAlign.right,
+                  style: AppTypography.monoSub.copyWith(
+                    color: widget.accentColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                    border: InputBorder.none,
+                  ),
+                  onSubmitted: _commitTextChange,
+                ),
+              ),
+              const SizedBox(width: 3),
+              Text(
+                widget.unit,
+                style: AppTypography.monoSub.copyWith(
+                  color: isDark ? AppColors.darkTextSecondary : const Color(0xFF64748B),
+                  fontSize: 11,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ),
       ],
