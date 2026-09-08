@@ -126,9 +126,13 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                     ],
                   ),
 
-                  // Navigation Links (Desktop)
+                  // Navigation Links (Responsive)
                   LayoutBuilder(
                     builder: (context, constraints) {
+                      final screenWidth = MediaQuery.of(context).size.width;
+                      if (screenWidth < 720) {
+                        return const StatusIndicator(label: 'ONLINE', type: StatusType.active);
+                      }
                       return Row(
                         children: [
                           _buildNavLink('SIMULATE', () => _scrollToKey(_simulatorKey)),

@@ -101,11 +101,12 @@ class _ExperimentLabSectionState extends State<ExperimentLabSection> {
               ),
               const SizedBox(height: AppConstants.spaceLg),
 
-              // Experiment Selector Tabs
-              Row(
+              // Experiment Selector Tabs (Responsive Wrap)
+              Wrap(
+                spacing: AppConstants.spaceMd,
+                runSpacing: AppConstants.spaceSm,
                 children: [
                   _buildTabButton('Experiment 1: Line Regulation (ΔVout / ΔVin)', ExperimentType.lineRegulation),
-                  const SizedBox(width: AppConstants.spaceMd),
                   _buildTabButton('Experiment 2: Load Regulation (VNL - VFL) / VFL', ExperimentType.loadRegulation),
                 ],
               ),
