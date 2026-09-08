@@ -51,16 +51,21 @@ class _CircuitDiagramWidgetState extends State<CircuitDiagramWidget>
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Auto-scale zoom down on mobile screens (e.g. 320px - 500px width)
+        // Auto-scale zoom down on smaller screens (e.g. 280px - 600px width)
         final double width = constraints.maxWidth.isFinite ? constraints.maxWidth : 600.0;
-        final double autoScale = (width / 540.0).clamp(0.55, 1.15);
+        final double height = constraints.maxHeight.isFinite ? constraints.maxHeight : 360.0;
+        
+        // Scale proportionally according to width and available height
+        final double widthScale = (width / 520.0).clamp(0.40, 1.05);
+        final double heightScale = (height / 340.0).clamp(0.40, 1.05);
+        final double autoScale = widthScale < heightScale ? widthScale : heightScale;
         final double effectiveZoom = widget.zoomScale * autoScale;
 
         Widget canvasWidget = AnimatedBuilder(
           animation: _controller,
           builder: (context, _) {
             return CustomPaint(
-              size: Size(double.infinity, (360 * autoScale).clamp(200.0, 420.0)),
+              size: Size(double.infinity, constraints.maxHeight.isFinite ? constraints.maxHeight : (360 * autoScale).clamp(180.0, 420.0)),
               painter: _Circuit3DWorkbenchPainter(
                 result: widget.result,
                 showCurrentFlow: widget.showCurrentFlow,

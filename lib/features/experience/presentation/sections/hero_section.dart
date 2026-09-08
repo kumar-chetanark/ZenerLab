@@ -94,7 +94,7 @@ class HeroSection extends StatelessWidget {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: isDesktop ? 380 : 250,
+                        height: isDesktop ? 380 : (constraints.maxWidth * 0.58).clamp(180.0, 240.0),
                         decoration: BoxDecoration(
                           color: AppColors.darkSurface.withValues(alpha: 0.5),
                           borderRadius: BorderRadius.circular(AppConstants.radiusLg),
@@ -102,7 +102,7 @@ class HeroSection extends StatelessWidget {
                         ),
                         child: CircuitDiagramWidget(
                           result: result,
-                          zoomScale: isDesktop ? 1.0 : 0.85,
+                          zoomScale: 1.0,
                         ),
                       ),
                       const SizedBox(height: AppConstants.spaceMd),

@@ -87,7 +87,7 @@ class LiveSimulatorSection extends StatelessWidget {
                       Expanded(
                         flex: isDesktop ? 6 : 0,
                         child: Container(
-                          height: isDesktop ? 460 : 340,
+                          height: isDesktop ? 460 : (constraints.maxWidth * 0.60).clamp(200.0, 280.0),
                           decoration: BoxDecoration(
                             color: AppColors.darkSurfaceContainer,
                             borderRadius: BorderRadius.circular(AppConstants.radiusLg),
@@ -95,7 +95,7 @@ class LiveSimulatorSection extends StatelessWidget {
                           ),
                           child: CircuitDiagramWidget(
                             result: result,
-                            zoomScale: isDesktop ? 1.0 : 0.85,
+                            zoomScale: 1.0,
                           ),
                         ),
                       ),

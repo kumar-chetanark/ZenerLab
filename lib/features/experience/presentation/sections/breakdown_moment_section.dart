@@ -63,7 +63,7 @@ class BreakdownMomentSection extends StatelessWidget {
                       Expanded(
                         flex: isDesktop ? 1 : 0,
                         child: Container(
-                          height: 320,
+                          height: isDesktop ? 320 : (constraints.maxWidth * 0.58).clamp(180.0, 240.0),
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
                             color: AppColors.darkSurfaceContainer,
