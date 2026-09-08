@@ -89,95 +89,47 @@ class HeroSection extends StatelessWidget {
                   ),
                   const SizedBox(height: AppConstants.spaceXl),
 
-                  // 3D Suspended Circuit Studio Centerpiece (Responsive Layout)
-                  LayoutBuilder(
-                    builder: (context, boxConstraints) {
-                      final isWideDesktop = boxConstraints.maxWidth >= 1050;
-
-                      if (isWideDesktop) {
-                        return Stack(
+                  // 3D Suspended Circuit Studio Centerpiece (Clean Decoupled Layout)
+                  Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: isDesktop ? 380 : 250,
+                        decoration: BoxDecoration(
+                          color: AppColors.darkSurface.withValues(alpha: 0.5),
+                          borderRadius: BorderRadius.circular(AppConstants.radiusLg),
+                          border: Border.all(color: AppColors.darkBorder),
+                        ),
+                        child: CircuitDiagramWidget(
+                          result: result,
+                          zoomScale: isDesktop ? 1.0 : 0.85,
+                        ),
+                      ),
+                      const SizedBox(height: AppConstants.spaceMd),
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: AppColors.darkSurfaceContainer,
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMd),
+                          border: Border.all(color: AppColors.darkBorder),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              width: double.infinity,
-                              height: 420,
-                              decoration: BoxDecoration(
-                                color: AppColors.darkSurface.withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-                                border: Border.all(color: AppColors.darkBorder),
-                              ),
-                              child: CircuitDiagramWidget(
-                                result: result,
-                                zoomScale: 1.05,
-                              ),
-                            ),
-                            // Floating Quick Dial HUD
-                            Positioned(
-                              right: 20,
-                              bottom: 20,
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: AppColors.darkSurfaceContainer.withValues(alpha: 0.92),
-                                  borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-                                  border: Border.all(color: AppColors.darkBorder),
-                                ),
-                                child: RotaryKnobWidget(
-                                  value: result.vin,
-                                  min: 0,
-                                  max: 30,
-                                  label: 'INPUT POWER (VIN)',
-                                  unit: 'V',
-                                  accentColor: AppColors.voltageIn,
-                                  onChanged: (val) => controller.updateVin(val),
-                                ),
-                              ),
+                            RotaryKnobWidget(
+                              value: result.vin,
+                              min: 0,
+                              max: 30,
+                              label: 'INPUT POWER (VIN)',
+                              unit: 'V',
+                              accentColor: AppColors.voltageIn,
+                              onChanged: (val) => controller.updateVin(val),
                             ),
                           ],
-                        );
-                      }
-
-                      return Column(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 280,
-                            decoration: BoxDecoration(
-                              color: AppColors.darkSurface.withValues(alpha: 0.5),
-                              borderRadius: BorderRadius.circular(AppConstants.radiusLg),
-                              border: Border.all(color: AppColors.darkBorder),
-                            ),
-                            child: CircuitDiagramWidget(
-                              result: result,
-                              zoomScale: 0.85,
-                            ),
-                          ),
-                          const SizedBox(height: AppConstants.spaceMd),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(
-                              color: AppColors.darkSurfaceContainer,
-                              borderRadius: BorderRadius.circular(AppConstants.radiusMd),
-                              border: Border.all(color: AppColors.darkBorder),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                RotaryKnobWidget(
-                                  value: result.vin,
-                                  min: 0,
-                                  max: 30,
-                                  label: 'INPUT POWER (VIN)',
-                                  unit: 'V',
-                                  accentColor: AppColors.voltageIn,
-                                  onChanged: (val) => controller.updateVin(val),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: AppConstants.spaceXl),
 
