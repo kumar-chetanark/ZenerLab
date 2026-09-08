@@ -134,15 +134,15 @@ class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
         const SizedBox(height: 8),
         // Typable interactive readout badge
         Container(
-          height: 28,
-          constraints: const BoxConstraints(minWidth: 68, maxWidth: 96),
-          padding: const EdgeInsets.symmetric(horizontal: 4),
+          height: 30,
+          constraints: const BoxConstraints(minWidth: 72, maxWidth: 104),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
             color: isDark ? AppColors.darkBg : const Color(0xFFF1F5F9),
             borderRadius: BorderRadius.circular(4),
             border: Border.all(
               color: _focusNode.hasFocus ? widget.accentColor : (isDark ? AppColors.darkBorder : const Color(0xFFCBD5E1)),
-              width: 1,
+              width: 1.2,
             ),
           ),
           child: Row(
@@ -159,17 +159,23 @@ class _RotaryKnobWidgetState extends State<RotaryKnobWidget> {
                   style: AppTypography.monoSub.copyWith(
                     color: widget.accentColor,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 13,
                   ),
                   decoration: const InputDecoration(
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                    contentPadding: EdgeInsets.zero,
                     border: InputBorder.none,
                   ),
+                  onChanged: (val) {
+                    final parsed = double.tryParse(val.trim());
+                    if (parsed != null && parsed >= widget.min && parsed <= widget.max) {
+                      widget.onChanged(parsed);
+                    }
+                  },
                   onSubmitted: _commitTextChange,
                 ),
               ),
-              const SizedBox(width: 3),
+              const SizedBox(width: 4),
               Text(
                 widget.unit,
                 style: AppTypography.monoSub.copyWith(
