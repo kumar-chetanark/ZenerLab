@@ -1,47 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A cinematic 3D digital electronics laboratory that teaches Zener diode voltage regulation through physics-driven interaction.">
 
-  <!-- iOS meta tags & icons -->
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="theme-color" content="#00E599">
+  <meta name="background-color" content="#0B0E14">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="zener_lab">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ZenerLab">
+  <meta name="application-name" content="ZenerLab">
+  <meta name="msapplication-TileColor" content="#0B0E14">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <!-- Icons -->
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/Icon-512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
 
-  <title>zener_lab</title>
+  <title>ZenerLab — 3D Electronics Laboratory</title>
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Premium dark launch splash */
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #0B0E14;
+      color: #F0F6FC;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #loading-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 40%, #161B22 0%, #0B0E14 100%);
+      z-index: 9999;
+      transition: opacity 0.4s ease-out;
+    }
+
+    .pulse-logo {
+      width: 64px;
+      height: 64px;
+      background: #00E599;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 35px rgba(0, 229, 153, 0.4);
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+
+    .pulse-logo svg {
+      width: 36px;
+      height: 36px;
+      fill: #0B0E14;
+    }
+
+    .loading-title {
+      margin-top: 24px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #F0F6FC;
+    }
+
+    .loading-sub {
+      margin-top: 6px;
+      font-size: 11px;
+      font-family: monospace;
+      color: #8B949E;
+      letter-spacing: 1px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 25px rgba(0, 229, 153, 0.3); }
+      50% { transform: scale(1.06); box-shadow: 0 0 45px rgba(0, 229, 153, 0.6); }
+    }
+  </style>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Clean Animated Splash while WebAssembly/CanvasKit loads -->
+  <div id="loading-container">
+    <div class="pulse-logo">
+      <svg viewBox="0 0 24 24">
+        <path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-6 10.49z"/>
+      </svg>
+    </div>
+    <div class="loading-title">ZENERLAB</div>
+    <div class="loading-sub">INITIALIZING 3D PHYSICS ENGINE...</div>
+  </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <script>
+    // Register Service Worker for PWA Offline Caching
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').then(function(reg) {
+          console.log('[ZenerLab PWA] Service Worker registered with scope:', reg.scope);
+        }).catch(function(err) {
+          console.warn('[ZenerLab PWA] Service Worker registration failed:', err);
+        });
+      });
+    }
+
+    // PWA Install Prompt Capture for Flutter In-App Trigger
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      window.zenerLabCanInstall = true;
+      if (typeof window.onZenerLabInstallable === 'function') {
+        window.onZenerLabInstallable();
+      }
+    });
+
+    window.installZenerLabApp = async function() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('[ZenerLab PWA] Install outcome:', outcome);
+        deferredPrompt = null;
+        window.zenerLabCanInstall = false;
+        return outcome === 'accepted';
+      }
+      return false;
+    };
+
+    window.addEventListener('appinstalled', () => {
+      console.log('[ZenerLab PWA] Successfully installed as standalone app!');
+      window.zenerLabCanInstall = false;
+    });
+
+    // Remove splash screen once Flutter renders
+    window.addEventListener('flutter-first-frame', function () {
+      const loader = document.getElementById('loading-container');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 400);
+      }
+    });
+  </script>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

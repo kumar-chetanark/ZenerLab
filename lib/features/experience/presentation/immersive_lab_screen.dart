@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/pwa_service.dart';
 import '../../../../core/widgets/status_indicator.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_typography.dart';
@@ -36,6 +37,14 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
   final GlobalKey _experimentKey = GlobalKey();
   final GlobalKey _theoryKey = GlobalKey();
   final GlobalKey _quizKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    PwaService.instance.initialize(() {
+      if (mounted) setState(() {});
+    });
+  }
 
   void _scrollToKey(GlobalKey key) {
     final context = key.currentContext;
@@ -126,12 +135,23 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                     ],
                   ),
 
-                  // Navigation Links (Responsive)
+                  // Navigation Links (Responsive) & Install App Button
                   LayoutBuilder(
                     builder: (context, constraints) {
                       final screenWidth = MediaQuery.of(context).size.width;
+                      final bool canInstall = PwaService.instance.canInstall;
+
                       if (screenWidth < 720) {
-                        return const StatusIndicator(label: 'ONLINE', type: StatusType.active);
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (canInstall) ...[
+                              _buildInstallButton(compact: true),
+                              const SizedBox(width: AppConstants.spaceSm),
+                            ],
+                            const StatusIndicator(label: 'ONLINE', type: StatusType.active),
+                          ],
+                        );
                       }
                       return Row(
                         children: [
@@ -140,6 +160,10 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                           _buildNavLink('EXPERIMENT', () => _scrollToKey(_experimentKey)),
                           _buildNavLink('THEORY', () => _scrollToKey(_theoryKey)),
                           _buildNavLink('QUIZ', () => _scrollToKey(_quizKey)),
+                          if (canInstall) ...[
+                            const SizedBox(width: AppConstants.spaceSm),
+                            _buildInstallButton(compact: false),
+                          ],
                           const SizedBox(width: AppConstants.spaceMd),
                           const StatusIndicator(label: 'ENGINE ACTIVE', type: StatusType.active),
                         ],
@@ -151,6 +175,48 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildInstallButton({required bool compact}) {
+    return InkWell(
+      onTap: () async {
+        final installed = await PwaService.instance.promptInstall();
+        if (installed && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('ZenerLab installed successfully!'),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+        }
+      },
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.primary.withValues(alpha: 0.15),
+          border: Border.all(color: AppColors.primary),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.download_rounded, color: AppColors.primary, size: 14),
+            if (!compact) ...[
+              const SizedBox(width: 6),
+              Text(
+                'INSTALL APP',
+                style: AppTypography.monoSub.copyWith(
+                  color: AppColors.primary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.8,
+                ),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
