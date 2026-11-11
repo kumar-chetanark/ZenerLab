@@ -34,7 +34,7 @@ class BreakdownMomentSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '04 — BREAKDOWN TRANSITION',
+                    'PROCEDURE STEP — BREAKDOWN TRANSITION TEST',
                     style: AppTypography.labelSmall.copyWith(
                       color: AppColors.primary,
                       letterSpacing: 1.2,

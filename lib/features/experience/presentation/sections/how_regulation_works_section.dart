@@ -58,7 +58,7 @@ class _HowRegulationWorksSectionState extends State<HowRegulationWorksSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '03 — PHYSICAL MECHANISM',
+                'THEORY SECTION — PHYSICAL MECHANISM',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.primary,
                   letterSpacing: 1.2,

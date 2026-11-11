@@ -6,21 +6,32 @@ Live Web Demo: https://kumar-chetanark.github.io/ZenerLab/
 
 ---
 
-## Overview
+## Laboratory Experiment Layout
 
-When studying analog electronics, understanding how a Zener diode maintains a constant output voltage across varying input voltages and load conditions can be tricky from static textbook diagrams alone.
+The application is structured into the standard formal laboratory report format:
 
-I created **ZenerLab** as a hands-on learning workstation where you can:
-- Interact directly with the circuit schematic in real time.
-- Vary input voltage ($V_{in}$), series resistance ($R_s$), and load resistance ($R_L$).
-- Observe instantaneous transitions between operating modes:
-  - **Below Breakdown / Unregulated State** ($V_{in} < V_z$)
-  - **Normal Regulation Mode** ($I_z > I_{z_{min}}$)
-  - **Heavy Load Drop** ($I_z \le 0$)
-  - **Over-Current & Over-Power Warnings** ($I_z > I_{z_{max}}$, $P_z > P_{z_{max}}$)
-- Analyze synchronized characteristic curves ($V_{out}$ vs $V_{in}$, $I_z$ vs $V_{in}$, and Regulation vs Load).
-- Log experimental data points and export them to CSV.
-- Test conceptual understanding with a built-in assessment/viva quiz module.
+1. **AIM OF THE EXPERIMENT**: Study the operation of a Zener diode as a shunt voltage regulator and analyze its Line Regulation and Load Regulation characteristics.
+2. **APPARATUS REQUIRED**: Complete catalog of circuit components, rated series resistors, variable decade loads, DC supplies, and measuring meters.
+3. **THEORY & WORKING PRINCIPLE**:
+   - Semiconductor physics of reverse breakdown (Zener tunneling vs Avalanche multiplication).
+   - Core governing formula wall ($V_{out}$, $I_s$, $I_L$, $I_z$, $P_z$).
+   - Four physical circuit stages (DC Source, Series Resistor, Zener Diode Clamp, Load Terminal).
+   - Step-by-step physical regulation mechanism.
+4. **PROCEDURE**:
+   - **Part A:** Line Regulation step-by-step instructions.
+   - **Part B:** Load Regulation step-by-step instructions.
+   - Interactive breakdown threshold transition test.
+5. **OBSERVATIONS**:
+   - Live interactive 3D circuit workbench with real-time particle electron flow.
+   - Synchronized characteristic curves (Line Regulation, Diode Current, Load Regulation).
+   - Automated parameter sweep observation tables with CSV data export.
+6. **CALCULATIONS**:
+   - Live mathematical derivation deck computing intermediate equations and nodal values step by step.
+7. **RESULT & CONCLUSION**:
+   - Quantitative evaluation of Line Regulation factor (%) and Load Regulation factor (%).
+   - Formal technical conclusions and operating criteria.
+8. **VIVA VOCE & EVALUATION**:
+   - Interactive quiz with instantaneous evaluation, score tracking, and explanations.
 
 ---
 
@@ -54,9 +65,8 @@ I created **ZenerLab** as a hands-on learning workstation where you can:
 ### 5. Viva & Assessment Module
 - Multiple-choice questions covering semiconductor physics, breakdown mechanisms (Zener vs Avalanche breakdown), and regulation conditions with explanations.
 
-### 6. Multi-Platform Support
-- **Web / PWA:** Runs in any browser with offline caching and standalone installation.
-- **Android APK:** Pre-built release APK available under GitHub Releases.
+### 6. Progressive Web App (PWA)
+- Runs in any browser with offline caching and standalone installation.
 
 ---
 
@@ -71,7 +81,7 @@ lib/
 │   ├── utils/            # Responsive helpers
 │   └── widgets/          # Shared cards, badges, and button components
 ├── features/
-│   ├── experience/       # Immersive guided laboratory walkthrough
+│   ├── experience/       # Standard Lab Report layout (Aim, Apparatus, Theory, Procedure, Observation, Calculations, Result)
 │   ├── simulator/        # Circuit canvas, interactive tuners, and meters
 │   ├── analysis/         # Synchronized characteristic curve plots
 │   ├── experiment/       # Automated sweep tables and CSV export
@@ -90,7 +100,7 @@ lib/
 
 ### Prerequisites
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) (v3.0.0 or higher)
-- Google Chrome (for web) or Android Studio / Android Device (for mobile)
+- Google Chrome or any modern web browser
 
 ### Installation & Run
 
@@ -110,12 +120,7 @@ lib/
    flutter run -d chrome
    ```
 
-4. **Run on Android Device:**
-   ```bash
-   flutter run -d android
-   ```
-
-5. **Run test suite:**
+4. **Run test suite:**
    ```bash
    flutter test
    ```
@@ -128,9 +133,3 @@ lib/
   ```bash
   flutter build web --release
   ```
-
-- **Android APK (Release):**
-  ```bash
-  flutter build apk --release
-  ```
-  The compiled APK will be located at `build/app/outputs/flutter-apk/app-release.apk`.

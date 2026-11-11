@@ -86,7 +86,7 @@ class _ExperimentLabSectionState extends State<ExperimentLabSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '08 — PRACTICAL EXPERIMENTATION',
+                'OBSERVATION TABLES & PARAMETER SWEEPS',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.primary,
                   letterSpacing: 1.2,
@@ -94,7 +94,7 @@ class _ExperimentLabSectionState extends State<ExperimentLabSection> {
               ),
               const SizedBox(height: AppConstants.spaceSm),
               Text(
-                'VIRTUAL ELECTRONICS LABORATORY BENCH',
+                'EXPERIMENTAL OBSERVATION TABLES',
                 style: (isDesktop ? AppTypography.displayLarge : AppTypography.displayMedium).copyWith(
                   color: AppColors.darkTextPrimary,
                 ),

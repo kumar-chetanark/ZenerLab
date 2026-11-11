@@ -5,18 +5,25 @@ import '../../../../core/widgets/status_indicator.dart';
 import '../../../../theme/app_colors.dart';
 import '../../../../theme/app_typography.dart';
 import 'sections/analysis_curves_section.dart';
-import 'sections/breakdown_moment_section.dart';
+import 'sections/apparatus_required_section.dart';
 import 'sections/calculation_deck_section.dart';
-import 'sections/circuit_architecture_section.dart';
+import 'sections/comprehensive_theory_section.dart';
 import 'sections/experiment_lab_section.dart';
 import 'sections/final_cta_section.dart';
 import 'sections/hero_section.dart';
-import 'sections/how_regulation_works_section.dart';
 import 'sections/live_simulator_section.dart';
+import 'sections/procedure_section.dart';
 import 'sections/quiz_viva_section.dart';
-import 'sections/theory_textbook_section.dart';
+import 'sections/result_conclusion_section.dart';
 
-/// Single-page continuous scroll coordinator hosting all 11 modular narrative chapters
+/// Single-page continuous scroll coordinator structured cleanly into standard Lab Report layout:
+/// 1. AIM
+/// 2. APPARATUS REQUIRED
+/// 3. THEORY (Semiconductor Physics, Formula Wall, 4 Stages, How Regulation Works)
+/// 4. PROCEDURE (Part A: Line Reg, Part B: Load Reg, Breakdown Threshold Testing)
+/// 5. OBSERVATIONS (Live Workbench, Interactive Characteristic Curves, Sweep Observation Tables)
+/// 6. CALCULATIONS (Mathematical Derivation Deck)
+/// 7. RESULT & CONCLUSION (Quantitative Metrics, Observations, Viva Quiz, Evaluation)
 class ImmersiveLabScreen extends StatefulWidget {
   const ImmersiveLabScreen({super.key});
 
@@ -27,15 +34,13 @@ class ImmersiveLabScreen extends StatefulWidget {
 class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  final GlobalKey _heroKey = GlobalKey();
-  final GlobalKey _architectureKey = GlobalKey();
-  final GlobalKey _howWorksKey = GlobalKey();
-  final GlobalKey _breakdownKey = GlobalKey();
-  final GlobalKey _simulatorKey = GlobalKey();
-  final GlobalKey _calculationKey = GlobalKey();
-  final GlobalKey _analysisKey = GlobalKey();
-  final GlobalKey _experimentKey = GlobalKey();
+  final GlobalKey _aimKey = GlobalKey();
+  final GlobalKey _apparatusKey = GlobalKey();
   final GlobalKey _theoryKey = GlobalKey();
+  final GlobalKey _procedureKey = GlobalKey();
+  final GlobalKey _observationKey = GlobalKey();
+  final GlobalKey _calculationKey = GlobalKey();
+  final GlobalKey _resultKey = GlobalKey();
   final GlobalKey _quizKey = GlobalKey();
 
   @override
@@ -69,27 +74,77 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
       backgroundColor: AppColors.darkBg,
       body: Stack(
         children: [
-          // Main Scrollable Experience
+          // Main Scrollable Lab Report Experience
           SingleChildScrollView(
             controller: _scrollController,
             child: Column(
               children: [
                 const SizedBox(height: 70), // Header clearance
-                Container(key: _heroKey, child: HeroSection(
-                  onExplore: () => _scrollToKey(_architectureKey),
-                  onStartSimulating: () => _scrollToKey(_simulatorKey),
-                )),
-                Container(key: _architectureKey, child: const CircuitArchitectureSection()),
-                Container(key: _howWorksKey, child: const HowRegulationWorksSection()),
-                Container(key: _breakdownKey, child: const BreakdownMomentSection()),
-                Container(key: _simulatorKey, child: const LiveSimulatorSection()),
-                Container(key: _calculationKey, child: const CalculationDeckSection()),
-                Container(key: _analysisKey, child: const AnalysisCurvesSection()),
-                Container(key: _experimentKey, child: const ExperimentLabSection()),
-                Container(key: _theoryKey, child: const TheoryTextbookSection()),
-                Container(key: _quizKey, child: const QuizVivaSection()),
+
+                // 1. AIM
+                Container(
+                  key: _aimKey,
+                  child: HeroSection(
+                    onExplore: () => _scrollToKey(_theoryKey),
+                    onStartSimulating: () => _scrollToKey(_observationKey),
+                  ),
+                ),
+
+                // 2. APPARATUS REQUIRED
+                Container(
+                  key: _apparatusKey,
+                  child: const ApparatusRequiredSection(),
+                ),
+
+                // 3. THEORY & WORKING PRINCIPLE (Physics, Formula Wall, 4 Stages, Regulation Principle)
+                Container(
+                  key: _theoryKey,
+                  child: const ComprehensiveTheorySection(),
+                ),
+
+                // 4. PROCEDURE (Line Reg, Load Reg, Breakdown Transition Test)
+                Container(
+                  key: _procedureKey,
+                  child: const ProcedureSection(),
+                ),
+
+                // 5. OBSERVATIONS (Workbench, Characteristic Curves, Sweep Tables)
+                Container(
+                  key: _observationKey,
+                  child: const Column(
+                    children: [
+                      LiveSimulatorSection(),
+                      AnalysisCurvesSection(),
+                      ExperimentLabSection(),
+                    ],
+                  ),
+                ),
+
+                // 6. CALCULATIONS (Live Derivation Deck)
+                Container(
+                  key: _calculationKey,
+                  child: const CalculationDeckSection(),
+                ),
+
+                // 7. RESULT & CONCLUSION (Metrics, Results, Conclusions)
+                Container(
+                  key: _resultKey,
+                  child: ResultConclusionSection(
+                    onSimulateAgain: () => _scrollToKey(_observationKey),
+                    onTakeQuiz: () => _scrollToKey(_quizKey),
+                    onExploreTheory: () => _scrollToKey(_theoryKey),
+                  ),
+                ),
+
+                // 8. ASSESSMENT & VIVA QUIZ (Full Quiz preserved)
+                Container(
+                  key: _quizKey,
+                  child: const QuizVivaSection(),
+                ),
+
+                // Lab Wrap-up Footer
                 FinalCtaSection(
-                  onSimulateAgain: () => _scrollToKey(_simulatorKey),
+                  onSimulateAgain: () => _scrollToKey(_observationKey),
                   onTakeQuiz: () => _scrollToKey(_quizKey),
                   onExploreTheory: () => _scrollToKey(_theoryKey),
                 ),
@@ -97,7 +152,7 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
             ),
           ),
 
-          // Floating Minimal Studio Navigation Bar
+          // Floating Studio Navigation Bar with Lab Layout Sections
           Positioned(
             top: 0,
             left: 0,
@@ -113,26 +168,29 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // Logo
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(4),
+                  InkWell(
+                    onTap: () => _scrollToKey(_aimKey),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Icon(Icons.bolt_rounded, color: AppColors.darkBg, size: 18),
                         ),
-                        child: const Icon(Icons.bolt_rounded, color: AppColors.darkBg, size: 18),
-                      ),
-                      const SizedBox(width: AppConstants.spaceSm),
-                      Text(
-                        'ZENERLAB',
-                        style: AppTypography.titleMedium.copyWith(
-                          color: AppColors.darkTextPrimary,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.0,
+                        const SizedBox(width: AppConstants.spaceSm),
+                        Text(
+                          'ZENERLAB',
+                          style: AppTypography.titleMedium.copyWith(
+                            color: AppColors.darkTextPrimary,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.0,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
 
                   // Navigation Links (Responsive) & Install App Button
@@ -141,7 +199,7 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                       final screenWidth = MediaQuery.of(context).size.width;
                       final bool canInstall = PwaService.instance.canInstall;
 
-                      if (screenWidth < 720) {
+                      if (screenWidth < 1100) {
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -149,22 +207,26 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
                               _buildInstallButton(compact: true),
                               const SizedBox(width: AppConstants.spaceSm),
                             ],
-                            const StatusIndicator(label: 'ONLINE', type: StatusType.active),
+                            const StatusIndicator(label: 'LAB ONLINE', type: StatusType.active),
                           ],
                         );
                       }
                       return Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          _buildNavLink('SIMULATE', () => _scrollToKey(_simulatorKey)),
-                          _buildNavLink('ANALYSIS', () => _scrollToKey(_analysisKey)),
-                          _buildNavLink('EXPERIMENT', () => _scrollToKey(_experimentKey)),
+                          _buildNavLink('AIM', () => _scrollToKey(_aimKey)),
+                          _buildNavLink('APPARATUS', () => _scrollToKey(_apparatusKey)),
                           _buildNavLink('THEORY', () => _scrollToKey(_theoryKey)),
-                          _buildNavLink('QUIZ', () => _scrollToKey(_quizKey)),
+                          _buildNavLink('PROCEDURE', () => _scrollToKey(_procedureKey)),
+                          _buildNavLink('OBSERVATION', () => _scrollToKey(_observationKey)),
+                          _buildNavLink('CALCULATIONS', () => _scrollToKey(_calculationKey)),
+                          _buildNavLink('RESULT', () => _scrollToKey(_resultKey)),
+                          _buildNavLink('VIVA QUIZ', () => _scrollToKey(_quizKey)),
                           if (canInstall) ...[
-                            const SizedBox(width: AppConstants.spaceSm),
+                            const SizedBox(width: 4),
                             _buildInstallButton(compact: false),
                           ],
-                          const SizedBox(width: AppConstants.spaceMd),
+                          const SizedBox(width: AppConstants.spaceSm),
                           const StatusIndicator(label: 'ENGINE ACTIVE', type: StatusType.active),
                         ],
                       );
@@ -226,12 +288,13 @@ class _ImmersiveLabScreenState extends State<ImmersiveLabScreen> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
         child: Text(
           label,
           style: AppTypography.labelSmall.copyWith(
             color: AppColors.darkTextSecondary,
-            letterSpacing: 0.8,
+            letterSpacing: 0.5,
+            fontSize: 10,
           ),
         ),
       ),

@@ -25,7 +25,7 @@ class CircuitArchitectureSection extends StatelessWidget {
             children: [
               // Section index
               Text(
-                '02 — PHYSICAL ARCHITECTURE',
+                'THEORY SECTION — PHYSICAL ARCHITECTURE',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.primary,
                   letterSpacing: 1.2,

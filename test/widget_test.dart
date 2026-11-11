@@ -10,8 +10,8 @@ void main() {
     SimulatorController.instance.resetToDefaults();
   });
 
-  group('ZenerLab Cinematic 3D Immersive Website Tests', () {
-    testWidgets('1. Verify 11 Cinematic Chapters & Floating Studio Nav', (WidgetTester tester) async {
+  group('ZenerLab Laboratory Report Layout Tests', () {
+    testWidgets('1. Verify Standard Lab Report Sections & Studio Nav', (WidgetTester tester) async {
       tester.view.physicalSize = const Size(1280, 1200);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(() => tester.view.resetPhysicalSize());
@@ -19,41 +19,46 @@ void main() {
       await tester.pumpWidget(const ZenerLabApp());
       await tester.pump(const Duration(milliseconds: 300));
 
-      // Hero Section
+      // Aim Section
       expect(find.text('ZENER LAB'), findsAtLeastNWidgets(1));
       expect(find.text('VOLTAGE REGULATION'), findsAtLeastNWidgets(1));
-      expect(find.text('01 — CINEMATIC LABORATORY'), findsOneWidget);
+      expect(find.text('01 — AIM OF THE EXPERIMENT'), findsOneWidget);
       expect(find.text('Enter Live Simulator'), findsOneWidget);
       expect(find.text('Explore Physics Story'), findsOneWidget);
 
-      // Section 02 & 03
-      expect(find.text('02 — PHYSICAL ARCHITECTURE'), findsOneWidget);
+      // Apparatus Required Section
+      expect(find.text('02 — APPARATUS REQUIRED'), findsOneWidget);
+      expect(find.text('COMPONENTS & LABORATORY INSTRUMENTS'), findsOneWidget);
+
+      // Theory Section (Incorporating Stages, Formula Wall, and Mechanism)
+      expect(find.text('03 — THEORY & WORKING PRINCIPLE'), findsOneWidget);
+      expect(find.text('SEMICONDUCTOR PHYSICS & REGULATION PRINCIPLE'), findsOneWidget);
       expect(find.text('FOUR PHYSICAL STAGES'), findsOneWidget);
-      expect(find.text('03 — PHYSICAL MECHANISM'), findsOneWidget);
       expect(find.text('HOW REGULATION WORKS'), findsOneWidget);
 
-      // Section 04 Breakdown
-      expect(find.text('04 — BREAKDOWN TRANSITION'), findsOneWidget);
+      // Procedure Section (Incorporating Breakdown Moment)
+      expect(find.text('04 — PROCEDURE'), findsOneWidget);
+      expect(find.text('STEP-BY-STEP LABORATORY INSTRUCTIONS'), findsOneWidget);
+      expect(find.text('THE MOMENT OF REGULATION'), findsOneWidget);
 
-      // Section 05 Live Simulator
-      expect(find.text('05 — LABORATORY WORKBENCH'), findsOneWidget);
-      expect(find.text('LIVE INTERACTIVE SIMULATOR'), findsOneWidget);
-
-      // Section 06 & 07 Derivation and Curves
-      expect(find.text('06 — LIVE MATHEMATICAL DERIVATION'), findsOneWidget);
-      expect(find.text('07 — MATHEMATICAL CHARACTERIZATION'), findsOneWidget);
+      // Observation Section (Workbench, Curves, Observation Tables)
+      expect(find.text('05 — OBSERVATION & SIMULATION WORKBENCH'), findsOneWidget);
+      expect(find.text('LIVE INTERACTIVE OBSERVATION WORKBENCH'), findsOneWidget);
       expect(find.text('SYNCHRONIZED ANALYSIS CURVES'), findsOneWidget);
+      expect(find.text('EXPERIMENTAL OBSERVATION TABLES'), findsOneWidget);
 
-      // Section 08 Experiment
-      expect(find.text('08 — PRACTICAL EXPERIMENTATION'), findsOneWidget);
-      expect(find.text('VIRTUAL ELECTRONICS LABORATORY BENCH'), findsOneWidget);
+      // Calculation Section
+      expect(find.text('06 — CALCULATIONS & MATHEMATICAL DERIVATION'), findsOneWidget);
+      expect(find.text('STEP-BY-STEP CALCULATION'), findsOneWidget);
 
-      // Section 09 & 10 Theory and Quiz
-      expect(find.text('09 — THEORETICAL FOUNDATION'), findsOneWidget);
-      expect(find.text('SEMICONDUCTOR PHYSICS & FORMULA WALL'), findsOneWidget);
-      expect(find.text('10 — ASSESSMENT & VIVA PREPARATION'), findsOneWidget);
+      // Result & Conclusion Section
+      expect(find.text('07 — RESULT & CONCLUSION'), findsOneWidget);
+      expect(find.text('EXPERIMENTAL RESULTS & ENGINEERING CONCLUSION'), findsOneWidget);
+      expect(find.text('EXPERIMENTAL RESULT'), findsOneWidget);
+      expect(find.text('CONCLUSION'), findsOneWidget);
 
-      // Section 11 Final CTA
+      // Viva Quiz & Final CTA
+      expect(find.text('INTERACTIVE QUIZ & VIVA VOCE'), findsOneWidget);
       expect(find.text('UNDERSTAND THE CIRCUIT.'), findsOneWidget);
       expect(find.text('NOT JUST THE FORMULA.'), findsOneWidget);
     });

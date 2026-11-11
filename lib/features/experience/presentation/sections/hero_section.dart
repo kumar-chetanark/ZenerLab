@@ -53,7 +53,7 @@ class HeroSection extends StatelessWidget {
                           border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
                         ),
                         child: Text(
-                          '01 — CINEMATIC LABORATORY',
+                          '01 — AIM OF THE EXPERIMENT',
                           style: AppTypography.labelSmall.copyWith(
                             color: AppColors.primary,
                             letterSpacing: 1.2,
@@ -82,7 +82,7 @@ class HeroSection extends StatelessWidget {
                   ),
                   const SizedBox(height: AppConstants.spaceSm),
                   Text(
-                    'SIMULATE. EXPERIMENT. UNDERSTAND THE PHYSICAL CIRCUIT.',
+                    'AIM: To study the operation of a Zener diode as a shunt voltage regulator and analyze its Line Regulation and Load Regulation characteristics.',
                     style: AppTypography.heroSub.copyWith(
                       color: AppColors.darkTextSecondary,
                     ),

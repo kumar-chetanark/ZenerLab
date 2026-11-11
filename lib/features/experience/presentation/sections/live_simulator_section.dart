@@ -44,7 +44,7 @@ class LiveSimulatorSection extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '05 — LABORATORY WORKBENCH',
+                            '05 — OBSERVATION & SIMULATION WORKBENCH',
                             style: AppTypography.labelSmall.copyWith(
                               color: AppColors.primary,
                               letterSpacing: 1.2,
@@ -52,7 +52,7 @@ class LiveSimulatorSection extends StatelessWidget {
                           ),
                           const SizedBox(height: AppConstants.spaceSm),
                           Text(
-                            'LIVE INTERACTIVE SIMULATOR',
+                            'LIVE INTERACTIVE OBSERVATION WORKBENCH',
                             style: (isDesktop ? AppTypography.displayLarge : AppTypography.displayMedium).copyWith(
                               color: AppColors.darkTextPrimary,
                             ),

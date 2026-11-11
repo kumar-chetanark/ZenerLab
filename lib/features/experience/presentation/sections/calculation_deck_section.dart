@@ -37,7 +37,7 @@ class CalculationDeckSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '06 — LIVE MATHEMATICAL DERIVATION',
+                    '06 — CALCULATIONS & MATHEMATICAL DERIVATION',
                     style: AppTypography.labelSmall.copyWith(
                       color: AppColors.primary,
                       letterSpacing: 1.2,

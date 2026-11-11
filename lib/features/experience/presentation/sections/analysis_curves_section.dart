@@ -61,7 +61,7 @@ class AnalysisCurvesSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '07 — MATHEMATICAL CHARACTERIZATION',
+                    'OBSERVATION PLOTS — CHARACTERISTIC CURVES',
                     style: AppTypography.labelSmall.copyWith(
                       color: AppColors.primary,
                       letterSpacing: 1.2,

@@ -39,7 +39,7 @@ class _QuizVivaSectionState extends State<QuizVivaSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '10 — ASSESSMENT & VIVA PREPARATION',
+                'LAB EVALUATION — ASSESSMENT & VIVA PREPARATION',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.primary,
                   letterSpacing: 1.2,
